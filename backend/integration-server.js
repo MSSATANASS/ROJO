@@ -8,7 +8,7 @@ const path = require('path');
 const pino = require('pino');
 const pinoHttp = require('pino-http');
 const bodyParser = require('body-parser');
-const fetch = require('node-fetch');
+const fetch = global.fetch || ((...args) => import('node-fetch').then(({ default: f }) => f(...args)));
 
 // 🔴 Enhanced features from CDP analysis
 const { RojoPolicyEngine } = require('./policy-engine');
