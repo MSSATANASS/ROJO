@@ -1250,75 +1250,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.textContent = isLight ? 'Oscuro' : 'Claro';
         });
     }
-    // Fondo animado: bitcoins cayendo detrás
-    const canvas = document.getElementById('crypto-bg');
-    if (canvas) {
-        const ctx = canvas.getContext('2d');
-        const DPR = window.devicePixelRatio || 1;
-        function resize(){ canvas.width = canvas.clientWidth * DPR; canvas.height = canvas.clientHeight * DPR; }
-        resize(); window.addEventListener('resize', resize);
-
-        const NUM = 42;
-        const coins = Array.from({ length: NUM }).map(() => ({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            r: (10 + Math.random() * 14) * DPR,
-            vy: (0.6 + Math.random() * 1.2) * DPR,
-            swayAmp: 10 * DPR * (0.6 + Math.random()),
-            swayFreq: 0.0018 + Math.random() * 0.0035,
-            phase: Math.random() * Math.PI * 2
-        }));
-
-        let t = 0;
-        function drawCoin(c){
-            ctx.save();
-            // halo
-            ctx.shadowColor = 'rgba(247,147,26,0.25)';
-            ctx.shadowBlur = 12 * DPR;
-
-            // cuerpo de la moneda (naranja Bitcoin)
-            const g = ctx.createRadialGradient(c.x - c.r*0.35, c.y - c.r*0.35, c.r*0.2, c.x, c.y, c.r);
-            g.addColorStop(0, '#FFD18A');
-            g.addColorStop(0.55, '#F7931A');
-            g.addColorStop(1, '#C46E00');
-            ctx.fillStyle = g;
-            ctx.beginPath(); ctx.arc(c.x, c.y, c.r, 0, Math.PI*2); ctx.fill();
-            ctx.strokeStyle = 'rgba(0,0,0,0.18)'; ctx.lineWidth = 1.1 * DPR; ctx.stroke();
-
-            // símbolo ₿ centrado
-            ctx.fillStyle = 'rgba(0,0,0,0.72)';
-            ctx.font = `${c.r * 1.2}px Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('₿', c.x, c.y + c.r * 0.05);
-            ctx.restore();
-        }
-
-        function step(){
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            t += 16;
-            for (const c of coins) {
-                c.y += c.vy;
-                c.x += Math.sin(t * c.swayFreq + c.phase) * (c.swayAmp * 0.04);
-
-                // reaparecer desde arriba
-                if (c.y - c.r > canvas.height) {
-                    c.y = -c.r - Math.random() * canvas.height * 0.1;
-                    c.x = Math.random() * canvas.width;
-                    c.vy = (0.6 + Math.random() * 1.2) * DPR;
-                    c.r = (10 + Math.random() * 14) * DPR;
-                    c.phase = Math.random() * Math.PI * 2;
-                }
-                // envolver en X
-                if (c.x < -c.r) c.x = canvas.width + c.r;
-                if (c.x > canvas.width + c.r) c.x = -c.r;
-
-                drawCoin(c);
-            }
-            requestAnimationFrame(step);
-        }
-        step();
-    }
+    // (Fondo de bitcoins eliminado por solicitud)
 });
 
 // Fallback en caso de carga tardía
