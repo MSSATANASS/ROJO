@@ -65,8 +65,7 @@ class RojoEcosystemDashboard {
                 }
             }
 
-            // 🤖 Bienvenida AI
-            this.fetchAiWelcome();
+            // 🤖 Bienvenida AI (ahora solo después de conectar wallet)
             
             console.log('🔴 ROJO: Ecosystem Dashboard initialized successfully');
         } catch (error) {
@@ -132,6 +131,9 @@ class RojoEcosystemDashboard {
                     
                     console.log('🔴 ROJO: Wallet connected:', this.connectedAddress);
                     this.showSuccess('¡Wallet conectado exitosamente!');
+
+                    // 🤖 Bienvenida AI tras conexión
+                    this.fetchAiWelcome();
                 }
             } else {
                 this.showError('MetaMask no está instalado. Por favor instala MetaMask.');
