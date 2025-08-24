@@ -15,7 +15,12 @@
     "rojo:start": "node start-rojo.js",
     "pay": "echo \"ROJO Pay Biometric\"",
     "wallet": "echo \"ROJO Smart Wallet\"",
-    "ecosystem": "echo \"ROJO Ecosystem Integration\""
+    "ecosystem": "echo \"ROJO Ecosystem Integration\"",
+    "compile": "node scripts/compile-contracts.js",
+    "deploy:base": "node scripts/deploy-base-railway.js",
+    "deploy:base:testnet": "node scripts/deploy-base-railway.js baseSepolia",
+    "deploy:base:mainnet": "node scripts/deploy-base-railway.js base",
+    "test:base": "node scripts/test-base-integration.js"
   },
   "dependencies": {
     "@coinbase/coinbase-sdk": "^0.25.0",
@@ -48,5 +53,10 @@
     "rebel"
   ],
   "author": "ROJO Organization",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^6.1.0",
+    "hardhat": "^3.0.1"
+  },
+  "type": "module"
 }

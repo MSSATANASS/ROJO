@@ -15,6 +15,9 @@ const { RojoPolicyEngine } = require('./policy-engine');
 const { EIP712Inspector } = require('./eip712-inspector');
 const RojoMCPServer = require('./mcp-server');
 
+// 🔴 Base Integration
+const BaseIntegration = require('./base-integration');
+
 // 🔴 Initialize logger
 const logger = pino({ level: 'info' });
 const httpLogger = pinoHttp({ logger });
@@ -31,6 +34,9 @@ const CORS_ORIGIN = process.env.CORS_ORIGIN || (isProduction ? '*' : 'http://loc
 const policyEngine = new RojoPolicyEngine();
 const eip712Inspector = new EIP712Inspector();
 const mcpServer = new RojoMCPServer();
+
+// 🔴 Initialize Base Integration
+const baseIntegration = new BaseIntegration();
 
 // 🔴 Middleware
 app.use(httpLogger);
@@ -454,6 +460,122 @@ app.get('/api/coinbase/test', async (req, res) => {
     }
 });
 
+// ========== BASE INTEGRATION ENDPOINTS ==========
+// 🔴 Base Health Check
+app.get('/api/base/health', async (req, res) => {
+    try {
+        const health = await baseIntegration.healthCheck();
+        res.json(health);
+    } catch (error) {
+        logger.error('Base health check failed:', error);
+        res.status(500).json({
+            error: 'Health check failed',
+            message: error.message
+        });
+    }
+});
+
+// 🔴 Get Base Networks
+app.get('/api/base/networks', (req, res) => {
+    try {
+        const networks = Object.entries(baseIntegration.networks).map(([key, network]) => ({
+            id: key,
+            name: network.name,
+            chainId: network.chainId,
+            explorer: network.explorer,
+            rpc: network.rpc
+        }));
+        
+        res.json({
+            networks: networks,
+            default: 'baseSepolia'
+        });
+    } catch (error) {
+        logger.error('Failed to get Base networks:', error);
+        res.status(500).json({
+            error: 'Failed to get networks',
+            message: error.message
+        });
+    }
+});
+
+// 🔴 Get Base Network Info
+app.get('/api/base/network/:networkName', async (req, res) => {
+    try {
+        const { networkName } = req.params;
+        const networkInfo = await baseIntegration.getNetworkInfo(networkName);
+        res.json(networkInfo);
+    } catch (error) {
+        logger.error('Failed to get Base network info:', error);
+        res.status(400).json({
+            error: 'Failed to get network info',
+            message: error.message
+        });
+    }
+});
+
+// 🔴 Get Wallet Balance on Base
+app.get('/api/base/balance/:address/:networkName?', async (req, res) => {
+    try {
+        const { address, networkName = 'baseSepolia' } = req.params;
+        const balance = await baseIntegration.getWalletBalance(address, networkName);
+        res.json(balance);
+    } catch (error) {
+        logger.error('Failed to get Base balance:', error);
+        res.status(400).json({
+            error: 'Failed to get balance',
+            message: error.message
+        });
+    }
+});
+
+// 🔴 Deploy Contract on Base
+app.post('/api/base/deploy', async (req, res) => {
+    try {
+        const { contractName, constructorArgs = [], networkName = 'baseSepolia' } = req.body;
+        
+        if (!contractName) {
+            return res.status(400).json({
+                error: 'Contract name is required'
+            });
+        }
+        
+        const deployment = await baseIntegration.deployContract(contractName, constructorArgs, networkName);
+        res.json(deployment);
+    } catch (error) {
+        logger.error('Base deployment failed:', error);
+        res.status(500).json({
+            error: 'Deployment failed',
+            message: error.message
+        });
+    }
+});
+
+// 🔴 Get Base Network Stats
+app.get('/api/base/stats/:networkName?', async (req, res) => {
+    try {
+        const { networkName = 'baseSepolia' } = req.params;
+        const networkInfo = await baseIntegration.getNetworkInfo(networkName);
+        
+        const stats = {
+            network: networkName,
+            blockNumber: networkInfo.blockNumber,
+            gasPrice: networkInfo.gasPrice,
+            chainId: networkInfo.chainId,
+            explorer: networkInfo.explorer,
+            timestamp: new Date().toISOString()
+        };
+        
+        res.json(stats);
+    } catch (error) {
+        logger.error('Failed to get Base stats:', error);
+        res.status(400).json({
+            error: 'Failed to get network stats',
+            message: error.message
+        });
+    }
+});
+
 // 🔴 Error handling middleware
 app.use((err, req, res, next) => {
     logger.error(err);
@@ -483,6 +605,8 @@ app.listen(PORT, async () => {
     logger.info(`   - Policy Engine: ${policyEngine.listPolicies().length} policies loaded`);
     logger.info(`   - EIP-712 Inspector: ${eip712Inspector.getTrustedContracts().length} trusted contracts`);
     logger.info(`   - Security APIs available at /api/policies and /api/eip712`);
+    logger.info(`   - Base Integration: Connected to Base Mainnet and Sepolia`);
+    logger.info(`   - Base APIs available at /api/base/*`);
     
     // 🔴 Initialize and start MCP Server if enabled
     if (process.env.MCP_SERVER_ENABLED === 'true') {
