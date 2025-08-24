@@ -59,3 +59,10 @@ CDP/
 test-*.js
 !test-enhanced-features.js
 !test-apis.js
+
+# Archivos de planificación interna (NO SUBIR A GITHUB)
+ROJO_BASE_INTEGRATION_PLAN.md
+*.plan.md
+*.diario.md
+.env.base
+.env.local
