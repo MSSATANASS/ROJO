@@ -1,0 +1,49 @@
+{
+  "name": "rojo-viral-miniapp",
+  "version": "1.0.0",
+  "description": "🔴 ROJO Viral Mini-App - Revolutionary Social Commerce Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "npm install",
+    "deploy": "npm install && npm start"
+  },
+  "keywords": [
+    "rojo",
+    "viral",
+    "miniapp", 
+    "base",
+    "social-commerce",
+    "blockchain",
+    "web3",
+    "nft",
+    "cryptocurrency"
+  ],
+  "author": "ROJO Organization",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "ethers": "^6.9.0",
+    "crypto": "^1.0.1",
+    "compression": "^1.7.4",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MSSATANASS/ROJO"
+  },
+  "bugs": {
+    "url": "https://github.com/MSSATANASS/ROJO/issues"
+  },
+  "homepage": "https://github.com/MSSATANASS/ROJO#readme"
+}
