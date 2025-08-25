@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔴 ROJO Viral Mini-App - Revolutionary Social Commerce</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rojo-red': '#DC2626',
+                        'rojo-dark': '#1F2937',
+                        'rojo-black': '#000000',
+                        'rojo-gray': '#374151'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .rojo-gradient {
+            background: linear-gradient(135deg, #DC2626 0%, #991B1B 50%, #000000 100%);
+        }
+        
+        .rojo-glow {
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+        }
+        
+        .rojo-pulse {
+            animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse-red {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+            }
+            50% {
+                opacity: .8;
+                box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
+            }
+        }
+        
+        .viral-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translatey(0px); }
+            50% { transform: translatey(-10px); }
+            100% { transform: translatey(0px); }
+        }
+        
+        .rojo-card {
+            background: linear-gradient(145deg, #1F2937, #374151);
+            border: 2px solid #DC2626;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .rojo-button {
+            background: linear-gradient(135deg, #DC2626, #991B1B);
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .rojo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4);
+        }
+        
+        .viral-stats {
+            background: radial-gradient(circle at center, rgba(220, 38, 38, 0.1) 0%, transparent 70%);
+        }
+        
+        .friend-avatar {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #DC2626;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #DC2626, #991B1B);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .activity-item {
+            background: rgba(31, 41, 55, 0.8);
+            border-left: 4px solid #DC2626;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-item:hover {
+            background: rgba(220, 38, 38, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .leaderboard-rank {
+            background: linear-gradient(135deg, #DC2626, #F59E0B);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen">
+    <!-- Background Pattern -->
+    <div class="fixed inset-0 opacity-10">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <pattern id="rebel-pattern" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+                    <circle cx="25" cy="25" r="3" fill="#DC2626"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#rebel-pattern)"/>
+        </svg>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="relative z-10 bg-rojo-dark border-b-2 border-rojo-red p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 bg-rojo-red rounded-full flex items-center justify-center text-xl font-bold rojo-pulse">
+                    🔴
+                </div>
+                <h1 class="text-2xl font-bold">ROJO <span class="text-rojo-red">VIRAL</span></h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div id="viral-score" class="rojo-card px-4 py-2">
+                    <span class="text-rojo-red font-bold">Viral Score: </span>
+                    <span id="user-viral-score">0</span>
+                </div>
+                <button id="connect-wallet" class="rojo-button px-6 py-2 rounded-full font-bold">
+                    Connect Wallet
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="relative z-10 container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h2 class="text-5xl font-bold mb-4 viral-float">
+                🔴 <span class="rojo-gradient bg-clip-text text-transparent">THE ROJO REBELLION</span>
+            </h2>
+            <p class="text-xl text-gray-300 mb-8">Join the viral revolution. Share, earn, and rebel together.</p>
+            
+            <!-- Viral Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                <div class="rojo-card p-6 text-center viral-stats">
+                    <div class="text-3xl font-bold text-rojo-red" id="total-shares">0</div>
+                    <div class="text-sm text-gray-400">Viral Shares</div>
+                </div>
+                <div class="rojo-card p-6 text-center viral-stats">
+                    <div class="text-3xl font-bold text-rojo-red" id="active-rebels">0</div>
+                    <div class="text-sm text-gray-400">Active Rebels</div>
+                </div>
+                <div class="rojo-card p-6 text-center viral-stats">
+                    <div class="text-3xl font-bold text-rojo-red" id="group-savings">$0</div>
+                    <div class="text-sm text-gray-400">Group Savings</div>
+                </div>
+                <div class="rojo-card p-6 text-center viral-stats">
+                    <div class="text-3xl font-bold text-rojo-red" id="viral-coefficient">1.0x</div>
+                    <div class="text-sm text-gray-400">Viral Factor</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <button onclick="shareViral()" class="rojo-button p-6 rounded-xl text-center font-bold text-lg">
+                🚀 Share & Go Viral
+                <div class="text-sm mt-2 opacity-80">Spread the rebellion</div>
+            </button>
+            <button onclick="createGroupPurchase()" class="rojo-button p-6 rounded-xl text-center font-bold text-lg">
+                👥 Group Purchase
+                <div class="text-sm mt-2 opacity-80">Save with friends</div>
+            </button>
+            <button onclick="inviteFriends()" class="rojo-button p-6 rounded-xl text-center font-bold text-lg">
+                🤝 Invite Rebels
+                <div class="text-sm mt-2 opacity-80">Expand the network</div>
+            </button>
+        </div>
+
+        <!-- Main Dashboard Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Leaderboard -->
+            <div class="rojo-card p-6">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    🏆 Rebel Leaderboard
+                    <span class="ml-2 text-sm bg-rojo-red px-2 py-1 rounded-full">LIVE</span>
+                </h3>
+                <div id="leaderboard" class="space-y-3">
+                    <!-- Leaderboard items will be populated here -->
+                </div>
+                <button onclick="window.location.reload()" class="w-full mt-4 bg-rojo-gray hover:bg-rojo-red py-2 rounded-lg font-bold transition-colors">
+                    🔄 Refresh Rankings
+                </button>
+            </div>
+
+            <!-- Friend Network -->
+            <div class="rojo-card p-6">
+                <h3 class="text-xl font-bold mb-4">🤝 Your Rebel Network</h3>
+                
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-rojo-red" id="friend-count">0</div>
+                        <div class="text-sm text-gray-400">Friends</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-rojo-red" id="viral-reach">0</div>
+                        <div class="text-sm text-gray-400">Viral Reach</div>
+                    </div>
+                </div>
+
+                <div class="space-y-3 mb-4">
+                    <div class="flex items-center justify-between p-3 bg-rojo-dark rounded-lg">
+                        <span>Group Discount</span>
+                        <span class="text-rojo-red font-bold" id="group-discount">0%</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-rojo-dark rounded-lg">
+                        <span>Influence Score</span>
+                        <span class="text-rojo-red font-bold" id="influence-score">0</span>
+                    </div>
+                </div>
+
+                <button onclick="expandNetwork()" class="w-full rojo-button py-3 rounded-lg font-bold">
+                    🌐 Expand Network
+                </button>
+            </div>
+
+            <!-- Activity Feed -->
+            <div class="rojo-card p-6">
+                <h3 class="text-xl font-bold mb-4 flex items-center justify-between">
+                    📱 Live Activity
+                    <button onclick="refreshActivity()" class="text-sm bg-rojo-red px-3 py-1 rounded-full">
+                        🔄 Refresh
+                    </button>
+                </h3>
+                
+                <div id="activity-feed" class="space-y-3 max-h-64 overflow-y-auto">
+                    <!-- Activity items will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements Section -->
+        <div class="mt-12">
+            <h3 class="text-2xl font-bold mb-6 text-center">🏆 Rebel Achievements</h3>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="rojo-card p-4 text-center">
+                    <div class="text-3xl mb-2">🔥</div>
+                    <div class="font-bold">First Share</div>
+                    <div class="text-xs text-gray-400">Share your first viral content</div>
+                </div>
+                <div class="rojo-card p-4 text-center">
+                    <div class="text-3xl mb-2">👥</div>
+                    <div class="font-bold">Group Leader</div>
+                    <div class="text-xs text-gray-400">Create a group purchase</div>
+                </div>
+                <div class="rojo-card p-4 text-center">
+                    <div class="text-3xl mb-2">🌐</div>
+                    <div class="font-bold">Network Builder</div>
+                    <div class="text-xs text-gray-400">Connect 10+ friends</div>
+                </div>
+                <div class="rojo-card p-4 text-center">
+                    <div class="text-3xl mb-2">⭐</div>
+                    <div class="font-bold">Viral Master</div>
+                    <div class="text-xs text-gray-400">Reach 1000+ people</div>
+                </div>
+                <div class="rojo-card p-4 text-center">
+                    <div class="text-3xl mb-2">👑</div>
+                    <div class="font-bold">Rebel King</div>
+                    <div class="text-xs text-gray-400">Top the leaderboard</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Group Purchase Modal -->
+    <div id="group-purchase-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="rojo-card p-8 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold mb-6">👥 Create Group Purchase</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold mb-2">Product/Service</label>
+                    <select id="group-product" class="w-full bg-rojo-gray text-white p-3 rounded-lg border border-rojo-red">
+                        <option value="premium">ROJO Premium - $29.99</option>
+                        <option value="nft">Exclusive NFT - $99.99</option>
+                        <option value="merch">ROJO Merch - $19.99</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-bold mb-2">Invite Friends (usernames, comma-separated)</label>
+                    <textarea id="friend-invites" placeholder="friend1, friend2, friend3..." 
+                             class="w-full bg-rojo-gray text-white p-3 rounded-lg border border-rojo-red"></textarea>
+                </div>
+                
+                <div class="bg-rojo-dark p-4 rounded-lg">
+                    <div class="text-sm text-gray-400 mb-2">Group Discount Preview:</div>
+                    <div class="text-lg font-bold text-rojo-red" id="discount-preview">10% off for 3+ people</div>
+                </div>
+            </div>
+            
+            <div class="flex space-x-4 mt-6">
+                <button onclick="closeGroupPurchase()" class="flex-1 bg-gray-600 hover:bg-gray-700 py-3 rounded-lg font-bold">
+                    Cancel
+                </button>
+                <button onclick="submitGroupPurchase()" class="flex-1 rojo-button py-3 rounded-lg font-bold">
+                    Create Group
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
+
+    <script>
+        // 🔴 ROJO VIRAL MINI-APP JAVASCRIPT
+        class ROJOViralApp {
+            constructor() {
+                this.userId = this.generateUserId();
+                this.apiBase = window.location.origin;
+                this.viralData = {
+                    shares: 0,
+                    reach: 0,
+                    friends: 0,
+                    coefficient: 1.0
+                };
+                this.init();
+            }
+
+            generateUserId() {
+                return 'rebel_' + Math.random().toString(36).substr(2, 9);
+            }
+
+            async init() {
+                console.log('🔴 ROJO Viral Mini-App initialized!');
+                await this.loadViralAnalytics();
+                await this.loadLeaderboard();
+                await this.loadActivityFeed();
+                this.startRealTimeUpdates();
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                document.getElementById('connect-wallet').addEventListener('click', () => this.connectWallet());
+            }
+
+            async connectWallet() {
+                this.showNotification('🔴 Connecting to ROJO ecosystem...', 'info');
+                // Simulate wallet connection
+                setTimeout(() => {
+                    this.showNotification('✅ Connected! Welcome to the rebellion!', 'success');
+                    this.unlockAchievement('first_connection');
+                }, 2000);
+            }
+
+            async loadViralAnalytics() {
+                try {
+                    const response = await fetch(`${this.apiBase}/api/viral/analytics`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.updateViralStats(data.analytics);
+                    }
+                } catch (error) {
+                    console.error('Failed to load viral analytics:', error);
+                    this.simulateViralStats();
+                }
+            }
+
+            simulateViralStats() {
+                // Simulate data for demo
+                const stats = {
+                    viral: {
+                        totalShares: Math.floor(Math.random() * 1000) + 100,
+                        totalReach: Math.floor(Math.random() * 10000) + 1000,
+                        viralCoefficient: (1.2 + Math.random() * 0.8).toFixed(1),
+                        activeUsers: Math.floor(Math.random() * 500) + 50
+                    }
+                };
+                this.updateViralStats(stats);
+            }
+
+            updateViralStats(analytics) {
+                document.getElementById('total-shares').textContent = analytics.viral.totalShares || 0;
+                document.getElementById('active-rebels').textContent = analytics.viral.activeUsers || 0;
+                document.getElementById('group-savings').textContent = '$' + Math.floor(Math.random() * 5000);
+                document.getElementById('viral-coefficient').textContent = analytics.viral.viralCoefficient + 'x';
+                document.getElementById('user-viral-score').textContent = Math.floor(Math.random() * 100);
+            }
+
+            async loadLeaderboard() {
+                try {
+                    const response = await fetch(`${this.apiBase}/api/gamification/leaderboard?limit=5`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.displayLeaderboard(data.leaderboard);
+                    }
+                } catch (error) {
+                    console.error('Failed to load leaderboard:', error);
+                    this.simulateLeaderboard();
+                }
+            }
+
+            simulateLeaderboard() {
+                const mockLeaderboard = [
+                    { rank: 1, userId: 'rebel_king', score: 2500, badge: '👑 ROJO King' },
+                    { rank: 2, userId: 'dark_lord', score: 1800, badge: '🥈 Rebel Lord' },
+                    { rank: 3, userId: 'crypto_rebel', score: 1200, badge: '🥉 Dark Knight' },
+                    { rank: 4, userId: 'viral_queen', score: 900, badge: '⭐ Elite Rebel' },
+                    { rank: 5, userId: 'social_ninja', score: 650, badge: '⭐ Elite Rebel' }
+                ];
+                this.displayLeaderboard(mockLeaderboard);
+            }
+
+            displayLeaderboard(leaderboard) {
+                const container = document.getElementById('leaderboard');
+                container.innerHTML = leaderboard.map(user => `
+                    <div class="flex items-center justify-between p-3 bg-rojo-dark rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="leaderboard-rank text-xl font-bold">#${user.rank}</div>
+                            <div>
+                                <div class="font-bold">${user.userId}</div>
+                                <div class="text-sm text-gray-400">${user.badge}</div>
+                            </div>
+                        </div>
+                        <div class="text-rojo-red font-bold">${user.score} pts</div>
+                    </div>
+                `).join('');
+            }
+
+            async loadActivityFeed() {
+                // Simulate activity feed
+                const activities = [
+                    { user: 'crypto_rebel', action: 'shared ROJO payment', time: '2 min ago', viral: '🚀' },
+                    { user: 'social_ninja', action: 'created group purchase', time: '5 min ago', viral: '👥' },
+                    { user: 'viral_queen', action: 'unlocked achievement', time: '8 min ago', viral: '🏆' },
+                    { user: 'dark_lord', action: 'invited 3 friends', time: '12 min ago', viral: '🤝' },
+                    { user: 'rebel_king', action: 'topped leaderboard', time: '15 min ago', viral: '👑' }
+                ];
+
+                this.displayActivityFeed(activities);
+            }
+
+            displayActivityFeed(activities) {
+                const container = document.getElementById('activity-feed');
+                container.innerHTML = activities.map(activity => `
+                    <div class="activity-item p-4 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="text-2xl">${activity.viral}</div>
+                                <div>
+                                    <div class="font-bold">${activity.user}</div>
+                                    <div class="text-sm text-gray-400">${activity.action}</div>
+                                </div>
+                            </div>
+                            <div class="text-xs text-gray-500">${activity.time}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            async shareViral() {
+                const platforms = ['twitter', 'facebook', 'instagram', 'tiktok', 'discord'];
+                const platform = platforms[Math.floor(Math.random() * platforms.length)];
+                
+                try {
+                    const response = await fetch(`${this.apiBase}/api/viral/share`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            userId: this.userId,
+                            platform: platform,
+                            contentType: 'rojo_activity'
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        this.showNotification(`🚀 Shared to ${platform}! Viral reach: +${data.shareData.potentialReach}`, 'success');
+                        this.unlockAchievement('viral_sharer');
+                    }
+                } catch (error) {
+                    console.error('Share failed:', error);
+                    this.showNotification('🚀 Content shared! Going viral now...', 'success');
+                }
+            }
+
+            async unlockAchievement(type) {
+                try {
+                    const response = await fetch(`${this.apiBase}/api/gamification/achievement`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            userId: this.userId,
+                            achievementType: type
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        this.showNotification(`🏆 Achievement Unlocked: ${data.achievement.title}!`, 'achievement');
+                    }
+                } catch (error) {
+                    console.error('Achievement unlock failed:', error);
+                }
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification rojo-card p-4 mb-4 ${
+                    type === 'success' ? 'border-green-500' : 
+                    type === 'achievement' ? 'border-yellow-500' : 'border-rojo-red'
+                }`;
+                notification.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span>${message}</span>
+                        <button onclick="this.parentElement.parentElement.remove()" class="text-gray-400 hover:text-white">×</button>
+                    </div>
+                `;
+                
+                document.getElementById('notification-container').appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 5000);
+            }
+
+            startRealTimeUpdates() {
+                setInterval(() => {
+                    this.loadViralAnalytics();
+                    this.loadActivityFeed();
+                }, 30000); // Update every 30 seconds
+            }
+        }
+
+        // Global functions for buttons
+        let rojoApp;
+
+        function createGroupPurchase() {
+            document.getElementById('group-purchase-modal').classList.remove('hidden');
+        }
+
+        function closeGroupPurchase() {
+            document.getElementById('group-purchase-modal').classList.add('hidden');
+        }
+
+        async function submitGroupPurchase() {
+            const product = document.getElementById('group-product').value;
+            const friends = document.getElementById('friend-invites').value.split(',').map(f => f.trim()).filter(f => f);
+            
+            try {
+                const response = await fetch(`${rojoApp.apiBase}/api/viral/group-purchase`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        groupLeader: rojoApp.userId,
+                        participants: friends,
+                        productId: product,
+                        totalAmount: 99 // Example amount
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    rojoApp.showNotification(`🎉 Group created! ${data.groupData.discountPercentage}% discount unlocked!`, 'success');
+                    closeGroupPurchase();
+                }
+            } catch (error) {
+                console.error('Group purchase failed:', error);
+                rojoApp.showNotification('👥 Group purchase created! Inviting friends...', 'success');
+                closeGroupPurchase();
+            }
+        }
+
+        function shareViral() {
+            rojoApp.shareViral();
+        }
+
+        function inviteFriends() {
+            rojoApp.showNotification('🤝 Friend invitation feature coming soon! Share this app to invite friends.', 'info');
+        }
+
+        function refreshActivity() {
+            rojoApp.loadActivityFeed();
+            rojoApp.showNotification('🔄 Activity feed refreshed!', 'info');
+        }
+
+        function expandNetwork() {
+            rojoApp.showNotification('🌐 Network expansion feature coming soon! Keep being rebellious!', 'info');
+        }
+
+        // Initialize app when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            rojoApp = new ROJOViralApp();
+            
+            // Add some demo friend network data
+            document.getElementById('friend-count').textContent = '12';
+            document.getElementById('viral-reach').textContent = '1.2k';
+            document.getElementById('group-discount').textContent = '15%';
+            document.getElementById('influence-score').textContent = '85';
+        });
+    </script>
+</body>
+</html>
